@@ -1,0 +1,43 @@
+ffmpeg version N-67929-g5182a2a Copyright (c) 2000-2014 the FFmpeg developers
+  built on Nov 23 2014 22:01:49 with gcc 4.9.2 (GCC)
+  configuration: --enable-gpl --enable-version3 --disable-w32threads --enable-avisynth --enable-bzlib --enable-fontconfig --enable-frei0r --enable-gnutls --enable-iconv --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libfreetype --enable-libgme --enable-libgsm --enable-libilbc --enable-libmodplug --enable-libmp3lame --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libopus --enable-librtmp --enable-libschroedinger --enable-libsoxr --enable-libspeex --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvo-aacenc --enable-libvo-amrwbenc --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxavs --enable-libxvid --enable-zlib
+  libavutil      54. 15.100 / 54. 15.100
+  libavcodec     56. 13.100 / 56. 13.100
+  libavformat    56. 15.100 / 56. 15.100
+  libavdevice    56.  3.100 / 56.  3.100
+  libavfilter     5.  2.103 /  5.  2.103
+  libswscale      3.  1.101 /  3.  1.101
+  libswresample   1.  1.100 /  1.  1.100
+  libpostproc    53.  3.100 / 53.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'upload\video_4352.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    creation_time   : 2013-12-28 01:54:13
+  Duration: 00:06:03.93, start: 0.000000, bitrate: 494 kb/s
+    Stream #0:0(und): Video: h264 (Main) (avc1 / 0x31637661), yuv420p, 854x480, 398 kb/s, 15 fps, 15 tbr, 90k tbn, 30 tbc (default)
+    Metadata:
+      creation_time   : 2013-12-28 01:54:13
+      handler_name    : VideoHandler
+    Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, mono, fltp, 93 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-28 01:54:10
+      handler_name    : SoundHandler
+[swscaler @ 03dd1a00] deprecated pixel format used, make sure you did set range correctly
+Output #0, image2, to 'upload\thumb_124x72_video_4352.jpg':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 512
+    compatible_brands: isomiso2avc1mp41
+    encoder         : Lavf56.15.100
+    Stream #0:0(und): Video: mjpeg, yuvj420p(pc), 124x72, q=2-31, 200 kb/s, 1 fps, 1 tbn, 1 tbc (default)
+    Metadata:
+      creation_time   : 2013-12-28 01:54:13
+      handler_name    : VideoHandler
+      encoder         : Lavc56.13.100 mjpeg
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> mjpeg (native))
+Press [q] to stop, [?] for help
+frame=    1 fps=0.0 q=3.5 Lsize=N/A time=00:00:01.00 bitrate=N/A    
+video:3kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
