@@ -135,7 +135,7 @@ class VideoModel {
     public function getVideokes($user_id=0, $category_id=0){
 
         try{
-            VideoModel::getConnectionSingelton();
+            VideoModel::get_connection_singleton();
             $query = mysql_query("SELECT * FROM videokes WHERE 1".
                 (($user_id > 0)?" AND user_id='".intval($user_id)."' ":"").
                 (($category_id > 0)?" AND category_id='".".intval($user_id)."."' ":"")
@@ -219,7 +219,7 @@ class VideoModel {
    //TODO:DO some clean up instantiation work here
    }
 
-    public static function getConnectionSingelton() {
+    public static function get_connection_singleton() {
 
       if( VideoModel::$connectionInstance == null ){
 
