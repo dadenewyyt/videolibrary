@@ -32,6 +32,8 @@ This php libarray makes advanatage of <b>PHP.INI setttings</b> of the following 
 4. extension=php_fileinfo.dll
    extension=php_gd2.dll 
 must be turned on to detect file http header on post.
+
+The libaray also gives you an option to set your <b>MAX_FILE_SIZE_LIMIT</b> 
 *******************************************************************************************************
 
 
