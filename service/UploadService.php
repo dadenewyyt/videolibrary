@@ -9,7 +9,8 @@
 
 /**
  * CodeIgniter 2.1.4
- * Some methods like xss clean and vide name regx methods are taken from codeigniter upload class.
+ * Some methods like xss clean and video
+ * name regx methods are taken from codeigniter upload class.
  * Thanks to the developers!
  */
 require_once('model/VideoModel.php');
@@ -217,7 +218,7 @@ class UploadService
          $log_file = 'logs/' . 'ffmpeg_log.log';
 
          /**
-         * Change the $ffmpeg_path according to your server machine setting
+         * Change the ffmpeg_path according to your server machine setting
          * / manually or leave it blank if is installed
          * and available on command line / console.
          */

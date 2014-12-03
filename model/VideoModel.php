@@ -120,32 +120,45 @@ class VideoModel {
     public static $connectionInstance;
 
 
-    public function getByID($id){
+    public static function getByID($id){
 
         try{
-            $output = DB::query("SELECT * FROM videokes WHERE id='".intval($id)."'")->execute()->as_array();
 
-            return $output[0];
+            $connection = VideoModel::get_connection_singleton();
+            $query = "SELECT * FROM ". VideoModel::$_table_name ." WHERE id='".intval($id)."'";
+            $result = mysqli_query($connection,$query);
 
-        }catch(Exception $err){
+            if($result!=null) {
+
+                $result_array = mysqli_fetch_assoc($result);
+                return $result_array;
+            }
+
+            return null;
+
+        } catch(Exception $err){
             return null;
         }
     }
 
-    public function getVideokes($user_id=0, $category_id=0){
+    static public function getVideos($user_id=0, $category_id=0){
 
-        try{
-            VideoModel::get_connection_singleton();
-            $query = mysql_query("SELECT * FROM videokes WHERE 1".
-                (($user_id > 0)?" AND user_id='".intval($user_id)."' ":"").
-                (($category_id > 0)?" AND category_id='".".intval($user_id)."."' ":"")
-                 );
-            $result = mysql_fetch_array($query);
+        try {
 
-            return $result;
+            $connection = VideoModel::get_connection_singleton();
+            $query = "select * from ".VideoModel::$_table_name;
+            $result = mysqli_query($connection,$query);
 
-        }catch(Exception $err){
-            return null;
+            if($result!=null) {
+
+                $result_array = mysqli_fetch_assoc($result);
+                return $result_array;
+            }
+            return null ;
+
+        } catch(PDOException $err) {
+
+            die ('Error' . $err->errorInfo());
         }
 
 
@@ -223,7 +236,13 @@ class VideoModel {
 
       if( VideoModel::$connectionInstance == null ){
 
-           VideoModel::$connectionInstance = mysql_connect(DB_HOST,DB_USERNAME,DB_PASSWORD) or die('Unable to connect to database');
+           VideoModel::$connectionInstance = new mysqli (DB_HOST,DB_USERNAME,DB_PASSWORD,DB_DATABASE) or die('Unable to connect to database');
+
+          // Check connection options
+          if ( VideoModel::$connectionInstance->connect_error) {
+
+              die("Connection failed: " .VideoModel::$connectionInstance->connect_error);
+          }
       }
         return VideoModel::$connectionInstance ;
 }
@@ -238,9 +257,6 @@ class VideoModel {
     //TODO:check if thumbnails exist or not
    }
 
-  public function uploadVideoFile($srcvideoFilePath,$destinationPath) {
-  //TODO:retrun a thumbnail based on a give video url
- }
 
  public function get_thumbnail($videoFileurl) {
  //TODO:return a thumbnail based on a give video url
@@ -253,7 +269,7 @@ class VideoModel {
 
     } else {
 
-       $this->getConnectionSingelton();
+       $this->get_connection_singleton();
        mysql_select_db(DB_DATABASE);
        $query = 'select * from video_library where video_filename =`'.$videoFileName.'`';
        $result = mysql_query($query) ;
