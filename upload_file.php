@@ -16,14 +16,9 @@ $filed = USER_FILE_UPLOAD_FIELD_NAME ; //you can replace this with anything you 
     //THEN CHECK POST that its sending the  UPLOAD FILE SUCCESSFULLY IF NOT STOP UPLOAD
        if( isset( $_FILES[$filed]) && !empty($_FILES[$filed])) {
 
-             //instantiate the class
-             $uploadService = new UploadServices();
+             $uploadService = New UploadService();
 
-             //get the post variable and upload services class
-             $uploadService->getHttpPostFileVariable( $_FILES[$filed] );
-
-            //then Upload
-            $uploadService->upload_file_now($filed);
+             $uploadService->upload_file_now($filed);
        }
 }
 

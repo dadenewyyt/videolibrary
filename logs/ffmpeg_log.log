@@ -9,7 +9,7 @@ ffmpeg version N-67929-g5182a2a Copyright (c) 2000-2014 the FFmpeg developers
   libswscale      3.  1.101 /  3.  1.101
   libswresample   1.  1.100 /  1.  1.100
   libpostproc    53.  3.100 / 53.  3.100
-Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'upload\video_4352.mp4':
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'upload\video_NTQ3NzM=.mp4':
   Metadata:
     major_brand     : isom
     minor_version   : 512
@@ -24,8 +24,8 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'upload\video_4352.mp4':
     Metadata:
       creation_time   : 2013-12-28 01:54:10
       handler_name    : SoundHandler
-[swscaler @ 03dd1a00] deprecated pixel format used, make sure you did set range correctly
-Output #0, image2, to 'upload\thumb_124x72_video_4352.jpg':
+[swscaler @ 03ed13e0] deprecated pixel format used, make sure you did set range correctly
+Output #0, image2, to 'upload\thumb_124x72_dmlkZW9fTlRRM056TT0=.jpg':
   Metadata:
     major_brand     : isom
     minor_version   : 512

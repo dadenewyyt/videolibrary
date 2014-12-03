@@ -11,12 +11,11 @@ require_once('config/config.php');
 
 class VideoModel {
 
-
     const THUMB_CONTENT = "151x89";
     const THUMB_HOME = "172x114";
     const THUMB_SIDEBAR = "124x72";
 
-    protected static $_table_name = 'videokes';
+    protected static $_table_name = 'videokes'; //any table name you want
 
     /** video primary key
      * @var int
@@ -36,7 +35,7 @@ class VideoModel {
     /** video title
      * @var string
      */
-    public $title;
+    public $title; // video
 
     /** video description
      * @var string
@@ -84,10 +83,11 @@ class VideoModel {
      */
     public $is_blocked;
 
-    /** video type
+
+    /** video name only with out extension
      * @var string
      */
-    public $video_type;
+    public $video_file_name;
 
     /** video file _ extension eg. .web , .flv , mp4 ..
      * @var string
@@ -118,8 +118,6 @@ class VideoModel {
      * This a singleton pattern , doesn't create a connection object at every instance
      */
     public static $connectionInstance;
-
-
 
 
     public function getByID($id){
