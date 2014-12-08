@@ -13,7 +13,7 @@
  * name regx methods are taken from codeigniter upload class.
  * Thanks to the developers!
  */
-require_once('model/VideoModel.php');
+require_once('model/video.model.php');
 
 class UploadService
 {
@@ -264,7 +264,7 @@ class UploadService
 
         $retval = null;
 
-        foreach (VideoModel::get_thumbnail_sizes() as $size) {
+        foreach (VideoModel::generate_thumbnails_of_four_size() as $size) /** VideoModel::get_thumbnail_sizes **/ {
 
             $video_name = explode(".", $this->postFileName);
 

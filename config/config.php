@@ -21,5 +21,5 @@ define('DEFAULT_VIDEO_STORE_LOCATION','upload');
 define('MAX_FILE_SIZE_LIMIT',256000000); //256M
 define('USER_FILE_UPLOAD_FIELD_NAME','file'); // example. <input type="file" name="file" id="file" />
 define('BASE_PATH','upload_file.php');
-define('FILE_TYPES','mp4');
+define('PATH_LIBRARY', '/libraries/videolibrary/');
 

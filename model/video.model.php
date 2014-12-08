@@ -117,53 +117,49 @@ class VideoModel {
     /**
      * This a singleton pattern , doesn't create a connection object at every instance
      */
-    public static $connectionInstance;
+    public static $DBH;
 
 
     public static function getByID($id){
 
         try{
 
-            $connection = VideoModel::get_connection_singleton();
-            $query = "SELECT * FROM ". VideoModel::$_table_name ." WHERE id='".intval($id)."'";
-            $result = mysqli_query($connection,$query);
+            $DBH = VideoModel::get_connection_singleton();
 
-            if($result!=null) {
+            $STH = $DBH->prepare("SELECT * FROM ". VideoModel::$_table_name ." WHERE id = ?");
 
-                $result_array = mysqli_fetch_assoc($result);
-                return $result_array;
+            $STH->bindParam(1,intval($id));
+
+            $STH->setFetchMode(PDO::FETCH_OBJ);
+
+            $result_object = $STH->fetch();
+
+            if($result_object != null) {
+
+               return $result_object;
             }
 
             return null;
 
-        } catch(Exception $err){
-            return null;
+        } catch(Exception $err) {
+            echo $err->getMessage();
         }
     }
 
-    static public function getVideos($user_id=0, $category_id=0){
 
-        try {
+    public static function get_video_objects(){
 
-            $connection = VideoModel::get_connection_singleton();
-            $query = "select * from ".VideoModel::$_table_name;
-            $result = mysqli_query($connection,$query);
+        $DBH = VideoModel::get_connection_singleton();
 
-            if($result!=null) {
+        $STH = $DBH->query("SELECT * FROM ". VideoModel::$_table_name);
 
-                $result_array = mysqli_fetch_assoc($result);
-                return $result_array;
-            }
-            return null ;
+        $STH->setFetchMode(PDO::FETCH_CLASS, 'VideoModel');
 
-        } catch(PDOException $err) {
+        $videoModelObject = $STH->fetch();
 
-            die ('Error' . $err->errorInfo());
-        }
-
+        return $videoModelObject ;
 
     }
-
 
     /**
      * DISABLING WEBM AND OGG FORMATS, BECAUSE mp4 PLAYS ON ALL SUPPORTED DEVICES
@@ -181,15 +177,31 @@ class VideoModel {
         return array(VideoModel::THUMB_CONTENT, VideoModel::THUMB_HOME, VideoModel::THUMB_SIDEBAR);
     }
 
+    public static function generate_thumbnails_of_four_size() {
+        /* you can differ the sizes later */
+        return array(VideoModel::THUMB_CONTENT, VideoModel::THUMB_CONTENT, VideoModel::THUMB_CONTENT,VideoModel::THUMB_CONTENT);
+    }
+
     public static function get_html5_video_formats(){
         return array(".mp4", ".webm", ".ogg" );
     }
 
-    public function get_video($format) {
-        return Uri::create("uploads" . DS . Model_User::clean_name($this->user->username) . DS . "videokes" . DS . $this->video . $format);
+    public function get_video_from_upload_location($user_name , $format) {
+
+
+        /***
+         * Generate and return a custom video URL location
+         * uses username to find video and its video name currently loaded and format of the video
+         */
+
+        $path = DEFAULT_VIDEO_STORE_LOCATION .'/'.'video_'.'/'. VideoModel::$_table_name . '/' . $user_name  . $format;
+
+        $path = VideoModel::directory_sep_helper($path);
+        return $path;
     }
 
     public function get_picture($user, $size) {
+
         $file = DOCROOT . "uploads/" . Model_User::clean_name($user->username) . DS . "videokes" . DS . "thumb_" . $size . "_" . $this->video . ".jpg";
         if (file_exists($file)) {
             return Uri::create("uploads" . DS . Model_User::clean_name($user->username) . DS . "videokes" . DS . "thumb_" . $size . "_" . $this->video . ".jpg");
@@ -234,33 +246,22 @@ class VideoModel {
 
     public static function get_connection_singleton() {
 
-      if( VideoModel::$connectionInstance == null ){
+        try {
 
-           VideoModel::$connectionInstance = new mysqli (DB_HOST,DB_USERNAME,DB_PASSWORD,DB_DATABASE) or die('Unable to connect to database');
+              if( VideoModel::$DBH == null ) {
+                   //PDO:Based Database  connection
+                   VideoModel::$DBH = new  PDO("mysql:host=".DB_HOST.";dbname=".DB_DATABASE, DB_USERNAME, DB_PASSWORD);
+                  }
+        }
 
-          // Check connection options
-          if ( VideoModel::$connectionInstance->connect_error) {
+        catch(PDOException $e) {
 
-              die("Connection failed: " .VideoModel::$connectionInstance->connect_error);
-          }
-      }
-        return VideoModel::$connectionInstance ;
+            echo $e->getMessage();
+        }
+
+        return VideoModel::$DBH ;
 }
 
-   public function generateThumbnails(){
-  //TODO:Return generated thumbnail file
-
-  }
-
-    public function checkIf_thumbnail_Exists($thumbnailPath) {
-
-    //TODO:check if thumbnails exist or not
-   }
-
-
- public function get_thumbnail($videoFileurl) {
- //TODO:return a thumbnail based on a give video url
- }
 
  public function findVideoByName($videoFileName) {
 
@@ -271,7 +272,7 @@ class VideoModel {
 
        $this->get_connection_singleton();
        mysql_select_db(DB_DATABASE);
-       $query = 'select * from video_library where video_filename =`'.$videoFileName.'`';
+       $query = "select * from ".VIDEOMODEL::$_table_name. "where video_filename =`'.$videoFileName.'`:";
        $result = mysql_query($query) ;
        $resultObject =  mysql_fetch_object($result);
 
@@ -288,17 +289,30 @@ class VideoModel {
 
   }
 
-  public function mapVideoModelFromDatabase($resultObject) {
+    public function generateThumbnails(){
+        //TODO:Return generated thumbnail file
 
-      $videoModelMapper = new VideoModel();
-      $videoModelMapper->video_id = $resultObject['video_id'];
-      $videoModelMapper->video_title = $resultObject['video_title'];
-      $videoModelMapper->video_url = $ $resultObject['video_filename'];
-      $videoModelMapper->video_file_extension = $resultObject['video_extension'];
-      $videoModelMapper->thumbnail_file_extension = $resultObject['video_extension'];
+    }
 
-  }
+    public function checkIf_thumbnail_Exists($thumbnailPath) {
+
+        //TODO:check if thumbnails exist or not
+    }
 
 
+    public function get_thumbnail($videoFileurl) {
+        //TODO:return a thumbnail based on a give video url
+    }
+
+    public static function directory_sep_helper ($path) {
+
+    if (strtoupper(substr(PHP_OS, 0, 3) == 'WIN'))
+        $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+    else
+        $path = str_replace('\\', DIRECTORY_SEPARATOR, $path);
+
+    return $path;
+
+    }
 
 }
