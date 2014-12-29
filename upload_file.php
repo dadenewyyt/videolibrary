@@ -7,7 +7,7 @@
  */
 
 require('config/config.php');
-require('service/UploadService.php');
+require('service/upload.service.php');
 
 
 //First check if the configuration for post variable is set
