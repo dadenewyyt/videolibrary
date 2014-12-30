@@ -15,6 +15,13 @@ class VideoModel {
     const THUMB_HOME = "172x114";
     const THUMB_SIDEBAR = "124x72";
 
+    static $THUMB_PART1 = array( "size"=>VideoModel::THUMB_HOME, "duration"=>"00:00:01");
+    static $THUMB_PART2 = array( "size"=>VideoModel::THUMB_HOME, "duration"=>"00:00:30");
+    static $THUMB_PART3 = array( "size"=>VideoModel::THUMB_HOME, "duration"=>"00:00:55");
+    static $THUMB_PART4 = array( "size"=>VideoModel::THUMB_HOME, "duration"=>"00:01:00");
+
+
+
     protected static $_table_name = 'videokes'; //any table name you want
 
     /** video primary key
@@ -179,7 +186,7 @@ class VideoModel {
 
     public static function generate_thumbnails_of_four_size() {
         /* you can differ the sizes later */
-        return array(VideoModel::THUMB_CONTENT, VideoModel::THUMB_CONTENT, VideoModel::THUMB_CONTENT,VideoModel::THUMB_CONTENT);
+        return array(VideoModel::$THUMB_PART1, VideoModel::$THUMB_PART2, VideoModel::$THUMB_PART3,VideoModel::$THUMB_PART4);
     }
 
     public static function get_html5_video_formats(){

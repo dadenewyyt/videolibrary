@@ -227,7 +227,7 @@ class UploadService
          * You can set your path here manually if u have not already put ffmpeg on the environment
          */
 
-         $ffmpeg_path ='' ; // leave empity to use no manaul paths
+         $ffmpeg_path ='D:\\MadebyUs4uResource\\Compressed\\ffmpeg-latest-win32-static\\ffmpeg-20141124-git-5182a2a-win32-static\\bin\\' ; // leave empity to use no manaul paths
 
         //TODO:checkout if THE ffmepg installed or not ?
         // $fileExtension = pathinfo($src_video_path , PATHINFO_EXTENSION);
@@ -264,13 +264,41 @@ class UploadService
 
         $retval = null;
 
-        foreach (VideoModel::generate_thumbnails_of_four_size() as $size) /** VideoModel::get_thumbnail_sizes **/ {
+        //get duration of a video
+
+        $cmd = sprintf('%sffmpeg -i %s 2>&1 |grep Duration ', $ffmpeg_path, $input_file);
+
+        if (strtoupper(substr(PHP_OS, 0, 3) == 'WIN'))
+            $cmd = str_replace('/', DIRECTORY_SEPARATOR, $cmd);
+        else
+            $cmd = str_replace('\\', DIRECTORY_SEPARATOR, $cmd);
+
+        $duration_cmd_result = array ();
+
+        exec($cmd, $duration_cmd_result);
+
+        /**end of code**/
+
+        $get_all_size = VideoModel::generate_thumbnails_of_four_size();
+
+        $count = 0 ;
+        foreach ( $get_all_size as $size=>$element) /** VideoModel::get_thumbnail_sizes **/ {
 
             $video_name = explode(".", $this->postFileName);
 
-            $thumb_output_file = DEFAULT_VIDEO_STORE_LOCATION . '/' . "thumb_" . $size . "_" . base64_encode($video_name[0]) . ".jpg";
+            $thumb_output_file = DEFAULT_VIDEO_STORE_LOCATION . '/' . "thumb_" . ++$count . "_" . base64_encode($video_name[0]) . ".jpg";
 
-            $cmd = sprintf('%sffmpeg -i %s %s -an -ss 00:00:01 -r 1 -vframes 1 -s %s %s %s', $ffmpeg_path, null, $input_file, $size, $thumb_output_file, $log_settings);
+            if(count($duration_cmd_result)) {
+                $duration = explode(':', trim(str_replace('Duration:', NULL, current(explode(',', current($duration_cmd_result))))));
+                list($hour, $min, $sec) = $duration;
+                $sec = sprintf("%02d:%02d:%02d", rand(0, $hour), rand(0, $min), rand(0, $sec));
+            } else {
+                $sec = "00:00:12"; //12sec it's ok :)
+            }
+
+
+
+            $cmd = sprintf('%sffmpeg -i %s %s -an -ss '.$sec.' -r 1 -vframes 1 -s %s %s %s', $ffmpeg_path, null, $input_file, $element['size'], $thumb_output_file, $log_settings);
 
             if (!file_exists($thumb_output_file)) {
 
@@ -282,6 +310,8 @@ class UploadService
                 exec($cmd, $output, $retval);
 
             }
+            //lets update range by 5 seconds
+
         }
 
 
@@ -305,7 +335,7 @@ class UploadService
             if (!empty($file_found_on_server) && $file_found_on_server == true) {
 
                 // Change the path according to your server.
-                $ffmpeg_path = 'C:\\Users\\DEVELOPER4\\Downloads\\Compressed\\ffmpeg-latest-win32-static\\ffmpeg-20141124-git-5182a2a-win32-static\\bin\\';
+                $ffmpeg_path = 'D:\\MadebyUs4u Resource\\Compressed\\ffmpeg-latest-win32-static\\ffmpeg-20141124-git-5182a2a-win32-static\\bin';
 
                 //TODO:checkout if THE ffmepg installed or not ?
 
