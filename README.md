@@ -1,4 +1,4 @@
-Video Uploader and Thmbnails Gnerator of doffretn size for windows and linux - PHP library
+Video Uploader and Thmbnails Gnerator of diffretn size for windows and linux - PHP library
 =========================
 
 This a video library created by daniel adenew for use inside your any of PHP frameworks as platform indpendent and supports video conversion , video upload and automatic video thumbnail generation and support database integration with your video model and may more...
